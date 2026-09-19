@@ -42,6 +42,9 @@ RUN sed -ri 's!/var/www/html!/var/www/html/public!g' \
 
 RUN chown -R www-data:www-data storage bootstrap/cache
 
+COPY start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
 EXPOSE 80
 
-CMD ["apache2-foreground"]
+CMD ["/usr/local/bin/start.sh"]
