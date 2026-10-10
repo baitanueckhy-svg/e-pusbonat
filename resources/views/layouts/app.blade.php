@@ -410,6 +410,207 @@
 
 </style>
 
+
+<style>
+/* E-PUSBONAT RESPONSIVE MOBILE v2 */
+
+.ep-mobile-toggle,
+.ep-mobile-overlay {
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    html,
+    body {
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    .ep-layout {
+        display: block !important;
+        width: 100% !important;
+        min-height: 100vh;
+    }
+
+    /* SIDEBAR HP */
+    .ep-sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        width: min(84vw, 300px) !important;
+        min-width: 0 !important;
+        height: 100vh !important;
+        z-index: 100 !important;
+
+        transform: translateX(-105%);
+        transition: transform .25s ease;
+
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+
+        box-shadow: 12px 0 35px rgba(0,0,0,.28);
+    }
+
+    .ep-layout.mobile-nav-open .ep-sidebar {
+        transform: translateX(0);
+    }
+
+    /* OVERLAY */
+    .ep-mobile-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 90;
+        background: rgba(2,15,24,.58);
+        backdrop-filter: blur(2px);
+    }
+
+    .ep-layout.mobile-nav-open .ep-mobile-overlay {
+        display: block;
+    }
+
+    /* MAIN */
+    main {
+        width: 100% !important;
+        min-width: 0 !important;
+        margin-left: 0 !important;
+    }
+
+    /* TOPBAR */
+    header {
+        min-height: 64px !important;
+        height: auto !important;
+        padding: 11px 14px !important;
+
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 80 !important;
+
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        gap: 10px !important;
+    }
+
+    .ep-mobile-toggle {
+        display: flex !important;
+
+        width: 42px;
+        min-width: 42px;
+        height: 42px;
+
+        align-items: center;
+        justify-content: center;
+
+        border: 1px solid rgba(20,184,166,.35);
+        border-radius: 12px;
+
+        background: rgba(15,118,110,.16);
+        color: #5eead4;
+
+        font-size: 21px;
+        cursor: pointer;
+    }
+
+    header > div:first-child {
+        min-width: 0 !important;
+        flex: 1 1 auto !important;
+        order: 1;
+    }
+
+    header > div:last-child {
+        order: 2;
+        margin-left: auto;
+        flex-shrink: 0;
+    }
+
+    header h1 {
+        font-size: 19px !important;
+        line-height: 1.2 !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    header p {
+        font-size: 10px !important;
+        line-height: 1.3 !important;
+    }
+
+    /* KONTEN */
+    main > section,
+    .ep-content {
+        padding: 18px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* CARD / GRID */
+    .grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* TABEL */
+    .overflow-x-auto {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 680px;
+    }
+
+    /* GAMBAR & GRAFIK */
+    img,
+    svg,
+    canvas {
+        max-width: 100%;
+    }
+
+    /* FORM HP */
+    input,
+    select,
+    textarea {
+        max-width: 100% !important;
+    }
+
+    button {
+        max-width: 100%;
+    }
+
+    /* AREA SENTUH */
+    .ep-sidebar nav a,
+    .ep-sidebar nav button {
+        min-height: 46px;
+    }
+
+    button,
+    a {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* HP KECIL */
+@media (max-width: 480px) {
+
+    main > section,
+    .ep-content {
+        padding: 14px !important;
+    }
+
+    header h1 {
+        font-size: 18px !important;
+    }
+
+    .ep-sidebar {
+        width: 88vw !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
@@ -1082,6 +1283,72 @@
     );
 
 })();
+</script>
+
+
+<script>
+/* E-PUSBONAT MOBILE NAV v2 */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const layout = document.querySelector(".ep-layout");
+    const sidebar = document.querySelector(".ep-sidebar");
+    const header = document.querySelector("header");
+
+    if (!layout || !sidebar || !header) return;
+
+    if (document.querySelector(".ep-mobile-toggle")) return;
+
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.className = "ep-mobile-toggle";
+    button.setAttribute("aria-label", "Buka menu");
+    button.setAttribute("aria-expanded", "false");
+    button.innerHTML = "☰";
+
+    header.insertBefore(button, header.firstChild);
+
+    const overlay = document.createElement("div");
+
+    overlay.className = "ep-mobile-overlay";
+    overlay.setAttribute("aria-hidden", "true");
+
+    layout.appendChild(overlay);
+
+    function closeMenu() {
+
+        layout.classList.remove("mobile-nav-open");
+
+        button.setAttribute("aria-expanded", "false");
+        button.innerHTML = "☰";
+
+        document.body.style.overflow = "";
+    }
+
+    button.addEventListener("click", function () {
+
+        const open =
+            layout.classList.toggle("mobile-nav-open");
+
+        button.setAttribute(
+            "aria-expanded",
+            open ? "true" : "false"
+        );
+
+        button.innerHTML = open ? "✕" : "☰";
+
+        document.body.style.overflow =
+            open ? "hidden" : "";
+    });
+
+    overlay.addEventListener("click", closeMenu);
+
+    sidebar.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", closeMenu);
+    });
+
+});
 </script>
 
 </body>

@@ -1,274 +1,520 @@
-cd ~/e-keswa
-nano resources/views/layouts/guest.blade.php
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>E-PUSBONAT | Login</title>
+    <title>E-PUSBONAT • Login</title>
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
         * {
             box-sizing: border-box;
         }
 
+        html,
         body {
             margin: 0;
+            min-height: 100%;
+        }
+
+        body {
             min-height: 100vh;
-            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            overflow-x: hidden;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+                BlinkMacSystemFont, "Segoe UI", sans-serif;
             background:
-                radial-gradient(circle at 10% 10%, rgba(75, 220, 205, .25), transparent 30%),
-                radial-gradient(circle at 90% 90%, rgba(7, 58, 83, .45), transparent 35%),
-                linear-gradient(135deg, #075e5a 0%, #087f78 50%, #06445f 100%);
+                radial-gradient(circle at 15% 20%, rgba(45, 212, 191, .25), transparent 28%),
+                radial-gradient(circle at 85% 80%, rgba(14, 116, 144, .35), transparent 32%),
+                linear-gradient(135deg, #0b7773 0%, #087f78 48%, #064e68 100%);
+        }
+
+        .ep-login-page {
+            min-height: 100vh;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 24px;
-            color: #173b4d;
-        }
-
-        .login-wrapper {
-            width: 100%;
-            max-width: 1050px;
-            min-height: 620px;
-            display: grid;
-            grid-template-columns: 1.05fr .95fr;
-            background: rgba(255,255,255,.96);
-            border-radius: 28px;
-            overflow: hidden;
-            box-shadow: 0 30px 80px rgba(0,0,0,.25);
-        }
-
-        .brand-panel {
+            padding: 34px;
             position: relative;
-            padding: 55px;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
             overflow: hidden;
-            background:
-                radial-gradient(circle at 85% 15%, rgba(90,240,222,.30), transparent 28%),
-                linear-gradient(145deg, #075e5a 0%, #087f78 55%, #06445f 100%);
         }
 
-        .brand-panel::after {
+        .ep-login-page::before {
             content: "";
             position: absolute;
-            width: 340px;
-            height: 340px;
+            width: 700px;
+            height: 700px;
+            border: 1px solid rgba(255,255,255,.10);
             border-radius: 50%;
-            border: 1px solid rgba(255,255,255,.14);
-            right: -120px;
-            bottom: -120px;
+            left: -350px;
+            top: -280px;
         }
 
-        .brand-icon {
-            width: 72px;
-            height: 72px;
-            border-radius: 20px;
-            background: rgba(255,255,255,.15);
-            border: 1px solid rgba(255,255,255,.25);
+        .ep-login-page::after {
+            content: "";
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 50%;
+            right: -450px;
+            bottom: -450px;
+        }
+
+        .ep-login-card {
+            position: relative;
+            z-index: 2;
+            width: min(1180px, 100%);
+            min-height: 650px;
+            display: grid;
+            grid-template-columns: 1.08fr .92fr;
+            overflow: hidden;
+            border-radius: 30px;
+            background: rgba(255,255,255,.96);
+            box-shadow:
+                0 35px 100px rgba(0, 35, 48, .35),
+                0 8px 30px rgba(0,0,0,.12);
+        }
+
+        /* =========================
+           BRANDING PANEL
+           ========================= */
+
+        .ep-login-brand {
+            position: relative;
+            overflow: hidden;
+            padding: 68px 62px 42px;
+            color: white;
+            background:
+                radial-gradient(circle at 78% 16%, rgba(45,212,191,.30), transparent 30%),
+                radial-gradient(circle at 15% 80%, rgba(45,212,191,.15), transparent 35%),
+                linear-gradient(145deg, #075e5a 0%, #087f78 52%, #07556b 100%);
+        }
+
+        .ep-brand-orb {
+            position: absolute;
+            width: 560px;
+            height: 560px;
+            right: -300px;
+            top: -250px;
+            border: 1px solid rgba(255,255,255,.10);
+            border-radius: 50%;
+        }
+
+        .ep-brand-orb-2 {
+            position: absolute;
+            width: 760px;
+            height: 760px;
+            left: -520px;
+            bottom: -520px;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 50%;
+        }
+
+        .ep-brand-content {
+            position: relative;
+            z-index: 3;
+        }
+
+        .ep-medical-icon {
+            width: 76px;
+            height: 76px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 34px;
+            border-radius: 22px;
+            background: rgba(255,255,255,.12);
+            border: 1px solid rgba(255,255,255,.25);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.20);
+            font-size: 37px;
             margin-bottom: 28px;
-            backdrop-filter: blur(10px);
         }
 
-        .brand-title {
-            font-size: 42px;
-            line-height: 1.05;
-            font-weight: 800;
-            letter-spacing: -.8px;
-            margin: 0 0 12px;
+        .ep-brand-title {
+            margin: 0;
+            font-size: clamp(42px, 4.2vw, 62px);
+            line-height: .98;
+            letter-spacing: -2px;
+            font-weight: 850;
         }
 
-        .brand-subtitle {
-            font-size: 17px;
-            opacity: .9;
-            margin-bottom: 38px;
+        .ep-brand-subtitle {
+            margin: 15px 0 0;
+            font-size: 22px;
+            font-weight: 500;
+            color: rgba(255,255,255,.90);
         }
 
-        .motto {
-            max-width: 440px;
-            font-size: 19px;
-            line-height: 1.7;
-            font-weight: 600;
+        .ep-brand-line {
+            width: 74px;
+            height: 4px;
+            border-radius: 999px;
+            background: #5eead4;
+            margin: 35px 0 28px;
+            box-shadow: 0 0 18px rgba(94,234,212,.55);
+        }
+
+        .ep-brand-motto {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.5;
+            font-weight: 750;
             letter-spacing: .2px;
         }
 
-        .motto-line {
-            width: 70px;
-            height: 4px;
-            border-radius: 99px;
-            background: #5eead4;
-            margin-bottom: 18px;
+        /* =========================
+           ECG
+           ========================= */
+
+        .ep-ecg-wrap {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 32px;
+            height: 150px;
+            z-index: 2;
+            overflow: hidden;
         }
 
-        .login-panel {
-            padding: 55px;
+        .ep-ecg-glow {
+            position: absolute;
+            left: -5%;
+            right: -5%;
+            bottom: 15px;
+            height: 100px;
+            background:
+                radial-gradient(
+                    ellipse at center,
+                    rgba(45,212,191,.25),
+                    transparent 68%
+                );
+            filter: blur(12px);
+        }
+
+        .ep-ecg {
+            position: absolute;
+            width: 200%;
+            height: 130px;
+            left: 0;
+            top: 5px;
+        }
+
+        .ep-ecg-line {
+            fill: none;
+            stroke: #b6fff4;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter:
+                drop-shadow(0 0 4px rgba(94,234,212,.95))
+                drop-shadow(0 0 13px rgba(45,212,191,.75));
+            stroke-dasharray: 1250;
+            stroke-dashoffset: 1250;
+            animation: epEcgMove 4.5s linear infinite;
+        }
+
+        @keyframes epEcgMove {
+            0% {
+                stroke-dashoffset: 1250;
+            }
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        .ep-ecg-base {
+            fill: none;
+            stroke: rgba(255,255,255,.12);
+            stroke-width: 1;
+        }
+
+        .ep-ecg-dot {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            right: 7%;
+            top: 57px;
+            border-radius: 50%;
+            background: #c9fff8;
+            box-shadow:
+                0 0 7px #c9fff8,
+                0 0 22px rgba(94,234,212,.95);
+            animation: epPulse 1.4s ease-in-out infinite;
+        }
+
+        @keyframes epPulse {
+            0%,100% {
+                transform: scale(.8);
+                opacity: .7;
+            }
+            50% {
+                transform: scale(1.35);
+                opacity: 1;
+            }
+        }
+
+        /* =========================
+           LOGIN FORM
+           ========================= */
+
+        .ep-login-form-panel {
+            background: #ffffff;
+            padding: 76px 68px 50px;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+        }
+
+        .ep-login-heading {
+            margin: 0;
+            color: #123b50;
+            font-size: 38px;
+            line-height: 1.1;
+            font-weight: 850;
+            letter-spacing: -1px;
+        }
+
+        .ep-login-description {
+            margin: 10px 0 38px;
+            color: #71869a;
+            font-size: 16px;
+        }
+
+        .ep-field {
+            margin-bottom: 22px;
+        }
+
+        .ep-label {
+            display: block;
+            margin-bottom: 9px;
+            color: #274e63;
+            font-size: 14px;
+            font-weight: 750;
+        }
+
+        .ep-input-wrap {
+            position: relative;
+        }
+
+        .ep-input {
+            width: 100%;
+            height: 58px;
+            border: 1px solid #d7e3e9;
+            border-radius: 15px;
+            background: #fbfdfe;
+            color: #183c4e;
+            padding: 0 17px;
+            outline: none;
+            font-size: 15px;
+            transition: .2s ease;
+        }
+
+        .ep-input:focus {
+            border-color: #0f9d92;
+            box-shadow: 0 0 0 4px rgba(15,157,146,.10);
             background: #ffffff;
         }
 
-        .login-box {
-            width: 100%;
-            max-width: 390px;
+        .ep-input::placeholder {
+            color: #9aabb7;
         }
 
-        .login-title {
-            font-size: 30px;
-            font-weight: 800;
-            color: #123b4d;
-            margin: 0 0 8px;
+        .ep-password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 0;
+            background: transparent;
+            color: #78909f;
+            cursor: pointer;
+            font-size: 19px;
         }
 
-        .login-description {
-            color: #718096;
-            margin: 0 0 32px;
-            font-size: 14px;
-        }
-
-        .field {
-            margin-bottom: 20px;
-        }
-
-        .field label {
-            display: block;
-            font-size: 13px;
-            font-weight: 700;
-            color: #315466;
-            margin-bottom: 8px;
-        }
-
-        .field input {
-            width: 100%;
-            height: 50px;
-            border: 1px solid #d5e3e8;
-            border-radius: 12px;
-            padding: 0 15px;
-            font-size: 15px;
-            outline: none;
-            transition: .2s ease;
-            background: #f9fcfd;
-        }
-
-        .field input:focus {
-            border-color: #0f9f92;
-            box-shadow: 0 0 0 4px rgba(15,159,146,.12);
-            background: white;
-        }
-
-        .remember {
+        .ep-remember {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin: 4px 0 24px;
-            font-size: 13px;
-            color: #64748b;
-        }
-
-        .remember input {
-            accent-color: #0f766e;
-        }
-
-        .login-button {
-            width: 100%;
-            height: 52px;
-            border: 0;
-            border-radius: 13px;
-            background: linear-gradient(135deg, #0f766e, #087f78);
-            color: white;
+            gap: 9px;
+            color: #647b8d;
             font-size: 14px;
+            margin: 3px 0 28px;
+        }
+
+        .ep-remember input {
+            width: 18px;
+            height: 18px;
+            accent-color: #0f8f87;
+        }
+
+        .ep-submit {
+            width: 100%;
+            height: 58px;
+            border: 0;
+            border-radius: 15px;
+            background:
+                linear-gradient(135deg, #087f78, #0f938b);
+            color: white;
+            font-size: 15px;
             font-weight: 800;
-            letter-spacing: .4px;
+            letter-spacing: .3px;
             cursor: pointer;
-            box-shadow: 0 10px 24px rgba(15,118,110,.22);
+            box-shadow:
+                0 13px 25px rgba(8,127,120,.20);
             transition: .2s ease;
         }
 
-        .login-button:hover {
+        .ep-submit:hover {
             transform: translateY(-1px);
-            box-shadow: 0 14px 28px rgba(15,118,110,.28);
+            box-shadow:
+                0 17px 30px rgba(8,127,120,.27);
         }
 
-        .error-box {
+        .ep-submit:active {
+            transform: translateY(0);
+        }
+
+        .ep-error {
+            margin-bottom: 20px;
+            padding: 12px 14px;
+            border-radius: 12px;
             background: #fff1f2;
             border: 1px solid #fecdd3;
             color: #be123c;
-            padding: 12px 14px;
-            border-radius: 10px;
             font-size: 13px;
-            margin-bottom: 20px;
         }
 
-        .footer {
+        .ep-footer {
+            margin-top: 35px;
+            padding-top: 21px;
+            border-top: 1px solid #e5edf1;
             text-align: center;
-            margin-top: 28px;
-            color: #94a3b8;
-            font-size: 12px;
+            color: #91a4b2;
+            font-size: 13px;
+            font-weight: 600;
         }
 
-        @media (max-width: 800px) {
-            body {
-                padding: 15px;
+        /* =========================
+           RESPONSIVE
+           ========================= */
+
+        @media (max-width: 900px) {
+
+            .ep-login-page {
+                padding: 22px;
             }
 
-            .login-wrapper {
+            .ep-login-card {
                 grid-template-columns: 1fr;
+                max-width: 620px;
                 min-height: auto;
-                max-width: 480px;
             }
 
-            .brand-panel {
-                padding: 35px 30px;
-                min-height: 270px;
+            .ep-login-brand {
+                min-height: 390px;
+                padding: 42px 38px 28px;
             }
 
-            .brand-title {
-                font-size: 32px;
+            .ep-brand-title {
+                font-size: 45px;
             }
 
-            .brand-subtitle {
-                margin-bottom: 20px;
+            .ep-brand-subtitle {
+                font-size: 18px;
             }
 
-            .motto {
-                font-size: 15px;
+            .ep-ecg-wrap {
+                bottom: 5px;
             }
 
-            .login-panel {
-                padding: 32px 25px 35px;
+            .ep-login-form-panel {
+                padding: 44px 38px 35px;
             }
         }
 
-        @media (max-width: 480px) {
-            .brand-panel {
-                padding: 28px 24px;
+        @media (max-width: 520px) {
+
+            .ep-login-page {
+                padding: 0;
+                align-items: stretch;
             }
 
-            .brand-icon {
+            .ep-login-card {
+                width: 100%;
+                min-height: 100vh;
+                border-radius: 0;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .ep-login-brand {
+                min-height: 330px;
+                padding: 34px 25px 20px;
+            }
+
+            .ep-medical-icon {
                 width: 58px;
                 height: 58px;
-                font-size: 27px;
-                margin-bottom: 20px;
-            }
-
-            .brand-title {
+                border-radius: 17px;
                 font-size: 28px;
+                margin-bottom: 19px;
             }
 
-            .login-panel {
-                padding: 28px 20px 30px;
+            .ep-brand-title {
+                font-size: 37px;
+                letter-spacing: -1.5px;
             }
 
-            .login-title {
-                font-size: 26px;
+            .ep-brand-subtitle {
+                margin-top: 9px;
+                font-size: 16px;
+            }
+
+            .ep-brand-line {
+                margin: 23px 0 17px;
+            }
+
+            .ep-brand-motto {
+                font-size: 14px;
+            }
+
+            .ep-ecg-wrap {
+                height: 105px;
+                bottom: 0;
+            }
+
+            .ep-ecg {
+                height: 100px;
+                top: 5px;
+            }
+
+            .ep-ecg-dot {
+                top: 45px;
+                width: 10px;
+                height: 10px;
+            }
+
+            .ep-login-form-panel {
+                padding: 35px 23px 28px;
+                flex: 1;
+            }
+
+            .ep-login-heading {
+                font-size: 29px;
+            }
+
+            .ep-login-description {
+                font-size: 14px;
+                margin-bottom: 28px;
+            }
+
+            .ep-input {
+                height: 54px;
+            }
+
+            .ep-submit {
+                height: 55px;
             }
         }
     </style>
@@ -276,60 +522,7 @@ nano resources/views/layouts/guest.blade.php
 
 <body>
 
-    <div class="login-wrapper">
-
-        <div class="brand-panel">
-
-            <div class="brand-icon">
-                🏥
-            </div>
-
-            <h1 class="brand-title">
-                E-PUSBONAT
-            </h1>
-
-            <div class="brand-subtitle">
-                Puskesmas Naibonat
-            </div>
-
-            <div class="motto-line"></div>
-
-            <div class="motto">
-                KAMI SIAP MELAYANI ANDA DENGAN RAPI.
-            </div>
-
-        </div>
-
-        <div class="login-panel">
-
-            <div class="login-box">
-
-                <h2 class="login-title">
-                    Selamat Datang
-                </h2>
-
-                <p class="login-description">
-                    Masuk ke sistem informasi E-PUSBONAT
-                </p>
-
-                @if ($errors->any())
-                    <div class="error-box">
-                        {{ $errors->first() }}
-                    </div>
-                @endif
-
-                {{ $slot }}
-
-                <div class="footer">
-                    E-PUSBONAT • Puskesmas Naibonat
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
+    {{ $slot }}
 
 </body>
 </html>
-
